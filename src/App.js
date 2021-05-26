@@ -15,9 +15,13 @@ function App() {
         <Route exact path='/signup'>
           <SignUp />
         </Route>
+        { logged? (
         <Route exact path='/monitor'>
           <Monitor />
-        </Route> 
+        </Route>
+        ): (
+          <Redirect to='/'/>
+        )} 
     </Router>
   );
 }
