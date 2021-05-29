@@ -79,7 +79,7 @@ export default function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Last7 로그인
+          로그인
         </Typography>
         <form className={classes.form} noValidate>
           <TextField

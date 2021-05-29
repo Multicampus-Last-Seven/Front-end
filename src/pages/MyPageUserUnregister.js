@@ -69,7 +69,7 @@ function MyPageUserUnregister(props) {
       <CssBaseline />
       {props.logged && <Redirect to='/monitor' />}
       <div className={classes.paper}>
-        <Typography variant="h3" className={classes.unregister}>
+        <Typography variant="h4" className={classes.unregister}>
           회원탈퇴
         </Typography>
         <form className={classes.form} noValidate>

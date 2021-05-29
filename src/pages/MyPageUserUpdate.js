@@ -131,7 +131,7 @@ function MyPageUserUpdate() {
       <CssBaseline />
       {searchButtonClicked && <FindAddr />}
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
+        <Typography variant="h4">
           회원정보 수정
         </Typography>
         <form className={classes.form} noValidate>

@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { Route, BrowserRouter as Router, Redirect } from "react-router-dom";
+import { Route, BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import "./App.css";
 import Header from "./pages/header/Header";
 import SignIn from "./pages/Login";
 import Monitor from "./pages/Monitor";
 import MyPage from "./pages/MyPage";
+import NotFound from "./pages/NotFound";
+import NoPage from "./pages/NotFound";
 import SignUp from "./pages/Signup";
 
 function App() {
   const [logged, setLogged] = useState(false);
   return (
-    <Router>      
+    <Router>
+      <Switch>     
         <Route exact path='/'>
           <SignIn setLogged={setLogged} logged={logged}/>
         </Route>
@@ -24,6 +27,8 @@ function App() {
         <Route exact path='/mypage'>
           <MyPage />
         </Route>
+        <Route exact component={NotFound} />
+        </Switch>
     </Router>
   );
 }

@@ -48,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
 function MyPage() {
   const classes = useStyles();
   const [menu, setMenu] = useState(0);
+  const onListItemClick = (index) => {
+      if(index === 4){
+          alert("화재신고가 완료됐습니다");
+          return;
+      }
+      setMenu(index);
+  }
 
   return (
     <div className={classes.root}>
@@ -72,7 +79,7 @@ function MyPage() {
         <div className={classes.drawerContainer}>
           <List>
             {['회원정보 수정', '카메라 설정', '로그아웃', '회원탈퇴', '화재신고'].map((text, index) => (
-              <ListItem button key={text} onClick={()=>setMenu(index)}>
+              <ListItem button key={text} onClick={()=>onListItemClick(index)}>
                 <ListItemIcon>
                     {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
@@ -89,7 +96,6 @@ function MyPage() {
         {menu === 1 && <MyPageUserCameraSetting />}
         {menu === 2 && <Redirect to='/' />}
         {menu === 3 && <MyPageUserUnregister />}
-        {menu === 4 && alert('화재신고가 완료됐습니다.')}
         
       </main>
     </div>
