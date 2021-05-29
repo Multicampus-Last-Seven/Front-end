@@ -1,0 +1,11 @@
+.header {
+  display: flex;
+  background: #3f51b5;
+  height: 40px;
+  padding: 1rem;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+}

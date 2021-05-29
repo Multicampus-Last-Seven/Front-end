@@ -1,5 +1,32 @@
 import React from 'react'
 import * as mqtt from 'react-paho-mqtt';
+import { makeStyles } from '@material-ui/core/styles';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import iots from '../Dummy';
+import { GridListTileBar, IconButton, ListSubheader } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  gridList: {
+    width: "100%",
+    height: "100%",
+  },
+  icon: {
+    color: 'rgba(255, 255, 255, 0.54)',
+  },
+  titleBar:{
+    position: "absolute",
+    top: "0"
+  }
+}));
 
 function Monitor() {
     //MQTTconnect();
@@ -7,6 +34,7 @@ function Monitor() {
     const _topic = ["mydata/stream/#"];
     const _options = {
     };
+    const classes = useStyles();
   
     React.useEffect(() => {
       _init();
@@ -68,12 +96,36 @@ function Monitor() {
       client.disconnect();
     }
 
-    return (       
+    let height = 0;
+    if(iots.length <= 2) height = window.innerHeight;
+    else height = window.innerHeight / (iots.length / 3);
+
+    return (
+      <div className={classes.root}>
+      <GridList cellHeight={height} className={classes.gridList} cols={3}>
+        {iots.map((iot) => (
+          <GridListTile key={iot.img}>
+            <img src={iot.img} alt={iot.title} />
+            <GridListTileBar
+              title={iot.title}
+              subtitle={iot.co}
+              actionIcon={
+                <IconButton aria-label={`info about ${iot.title}`} className={classes.icon}>
+                  <InfoIcon />                  
+                </IconButton>
+              }
+              className={classes.titleBar}
+            />
+          </GridListTile>
+        ))}
+      </GridList>
+    </div>  
+    )
+    {/*  
         <div>
             <img id="streaming" src="" alt=""/>
             <h2 id="sensor1">Text test</h2>
-        </div>
-    )
+      </div>*/}
 }
 
 export default Monitor

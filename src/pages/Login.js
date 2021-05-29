@@ -15,7 +15,7 @@ import axios from 'axios';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © FDS"}
+      {"Copyright © Last7"}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -79,7 +79,7 @@ export default function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          FDS 로그인
+          Last7 로그인
         </Typography>
         <form className={classes.form} noValidate>
           <TextField

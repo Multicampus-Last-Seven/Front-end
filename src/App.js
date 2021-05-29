@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Route, BrowserRouter as Router, Redirect } from "react-router-dom";
 import "./App.css";
+import Header from "./pages/header/Header";
 import SignIn from "./pages/Login";
 import Monitor from "./pages/Monitor";
+import MyPage from "./pages/MyPage";
 import SignUp from "./pages/Signup";
 
 function App() {
@@ -15,13 +17,13 @@ function App() {
         <Route exact path='/signup'>
           <SignUp />
         </Route>
-        { logged? (
         <Route exact path='/monitor'>
+          <Header />
           <Monitor />
         </Route>
-        ): (
-          <Redirect to='/'/>
-        )} 
+        <Route exact path='/mypage'>
+          <MyPage />
+        </Route>
     </Router>
   );
 }
