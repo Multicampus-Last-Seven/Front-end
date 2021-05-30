@@ -5,12 +5,14 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
-function MyPageUserCameraSetting() {
+function MyPageUserCameraSetting(props) {
   const [inputList, setInputList] = useState([
     { serialNumber: "", location: "" },
   ]);
+  const [onSaveSuccess, setOnSuccessSave] = useState(-1);
 
   // handle input change
   const handleInputChange = (e, index) => {
@@ -31,6 +33,28 @@ function MyPageUserCameraSetting() {
   const handleAddClick = () => {
     setInputList([...inputList, { serialNumber: "", location: "" }]);
   };
+
+  const onSaveButtonClick = () => {
+    console.log(inputList);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
+    axios
+      .post(`http://localhost:8000/api/${props.userId}/iots`, {
+        "userid": props.userId,
+        "iots": [...inputList],
+      })
+      .then((res) => {
+        props.setIots([...inputList]);
+        setOnSuccessSave(1);
+      })
+      .catch((error) => {
+        console.log(error.response.data.detail)
+        setOnSuccessSave(0);
+      });
+  };
+
+  useEffect(()=>{
+    setInputList(props.iots)
+  },[])
 
   return (
     <Container component="main" maxWidth="xs">
@@ -88,14 +112,24 @@ function MyPageUserCameraSetting() {
         );
       })}
       <Button
-        type="submit"
         variant="contained"
         color="primary"
         fullWidth
         style={{ marginTop: "40px" }}
+        onClick={onSaveButtonClick}
       >
         저장하기
       </Button>
+      {onSaveSuccess === 0 && (
+        <Typography variant="h6" style={{ marginTop: "20px" }}>
+          CCTV가 존재하지않습니다.
+        </Typography>
+      )}
+      {onSaveSuccess === 1 && (
+        <Typography variant="h6" style={{ marginTop: "20px" }}>
+          CCTV가 등록됐습니다.
+        </Typography>
+      )}
     </Container>
   );
 }

@@ -4,6 +4,7 @@
   height: 40px;
   padding: 1rem;
   color: white;
+  justify-content: space-between;
 }
 
 a {

@@ -6,6 +6,8 @@ import GridListTile from '@material-ui/core/GridListTile';
 import iots from '../Dummy';
 import { GridListTileBar, IconButton, ListSubheader } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
+import NotFound from './NotFound';
+import NoIoT from './NoIoT';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Monitor() {
+function Monitor(props) {
     //MQTTconnect();
     const [ client, setClient ] = React.useState(null);
     const _topic = ["mydata/stream/#"];
@@ -76,7 +78,6 @@ function Monitor() {
   
     // called when subscribing topic(s)
     const _onSubscribe = () => {
-      console.log(client);
       client.connect({ onSuccess: () => {
         for (var i = 0; i < _topic.length; i++) {
           client.subscribe(_topic[i], _options);
@@ -95,17 +96,17 @@ function Monitor() {
     const _onDisconnect = () => {
       client.disconnect();
     }
-
+    
     let height = 0;
-    if(iots.length <= 2) height = window.innerHeight;
-    else height = window.innerHeight / (iots.length / 3);
-
+    if(props.iots.length <= 2) height = window.innerHeight;
+    else height = window.innerHeight / (props.iots.length / 3);
     return (
       <div className={classes.root}>
+      {props.iots.length === 0? <NoIoT /> :(
       <GridList cellHeight={height} className={classes.gridList} cols={3}>
-        {iots.map((iot) => (
+        {props.iots.map((iot) => (
           <GridListTile key={iot.img}>
-            <img src={iot.img} alt={iot.title} />
+            <img src={iot.img} alt="Not found" />
             <GridListTileBar
               title={iot.title}
               subtitle={iot.co}
@@ -119,7 +120,8 @@ function Monitor() {
           </GridListTile>
         ))}
       </GridList>
-    </div>  
+      )}
+    </div>
     )
     {/*  
         <div>

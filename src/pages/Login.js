@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import { Link, Redirect }from 'react-router-dom';
+import { Link, Redirect } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import axios from 'axios';
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -42,38 +42,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const onLogin = async (userid, password, setLogged, setLoginSuccess) => {
-  await axios.post(
-    "http://localhost:8000/api/login",
-    {
-      "userid": userid,
-      "password": password
-    }
-  ).then(res => {
-    localStorage.setItem('token', res.data.token);
-    setLogged(true);
-
-  }).catch(error => {
-    setLoginSuccess(0);
-  });
-}
-
 export default function SignIn(props) {
   const classes = useStyles();
-  const [uid, setUid] = useState('');
-  const [password, setPassword] = useState('');
+  const [uid, setUid] = useState("");
+  const [password, setPassword] = useState("");
   const [loginSuccess, setLoginSuccess] = useState(-1);
+  let resIots = null;
+
+  const onLogin = (userid, password) => {
+    axios
+      .post("http://localhost:8000/api/login", {
+        userid: userid,
+        password: password,
+      })
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
+        props.setMyName(res.data.name);
+        props.setAddress(res.data.road_addr + "   " + res.data.detail_addr);
+        if(res.data.iots.length > 0) props.setIots(res.data.iots);
+        props.setUserId(res.data.userid);
+        setLoginSuccess(1);
+        props.setOnSignupSuccess(-1);
+      })
+      .catch((error) => {
+        setLoginSuccess(0);
+        console.log(error);
+      });
+  };
 
   const onSignInButtonClick = (e) => {
-      e.preventDefault();
-      onLogin(uid, password, props.setLogged, setLoginSuccess);
-  }
-
+    e.preventDefault();
+    onLogin(uid, password);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      {props.logged && <Redirect to='/monitor' />}
+      {localStorage.getItem("token") && <Redirect to="/monitor" />}
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -92,7 +97,7 @@ export default function SignIn(props) {
             name="userid"
             autoComplete="userid"
             autoFocus
-            onChange = {(e) => setUid(e.target.value)}
+            onChange={(e) => setUid(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -104,7 +109,7 @@ export default function SignIn(props) {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange = {(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           {loginSuccess === 0 && "아이디 또는 비밀번호가 올바르지 않습니다."}
           <Button
@@ -113,18 +118,16 @@ export default function SignIn(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick = {e => onSignInButtonClick(e)}
+            onClick={(e) => onSignInButtonClick(e)}
           >
             로그인
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to='/' >
-                아이디/비밀번호를 분실하셨나요?
-              </Link>
+              <Link to="/">아이디/비밀번호를 분실하셨나요?</Link>
             </Grid>
             <Grid item>
-              <Link to="/signup" >
+              <Link to="/signup">
                 {"회원가입"}
               </Link>
             </Grid>

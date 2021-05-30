@@ -11,7 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import DaumPostcode from "react-daum-postcode";
 import { Modal, RootRef } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
 function Copyright() {
@@ -53,10 +53,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
   const classes = useStyles();
   const [isAddress, setIsAddress] = useState("");
   const [isZoneCode, setIsZoneCode] = useState("");
+  const [detailAddr, setDetailAddr] = useState("");
   const [searchButtonClicked, setSearchButtonClicked] = useState(false);
   const [userid, setUserid] = useState('');
   const [isIdUnique, setIsIdUnique] = useState(-1);
@@ -64,6 +65,8 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
   const [isCorrectPassword, setIsCorrectPassword] = useState(-1);
+  const [email, setEmail] = useState("");
+  const [myName, setMyName] = useState("");
 
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -136,10 +139,46 @@ export default function SignUp() {
       })
   }
 
+  const onSignupButtonClick = (e) => {
+    e.preventDefault();    
+    if(!userid) alert('사용자 ID를 입력하세요.');
+    else if(isIdUnique !== 1 || isChecked !== 1) alert('사용자 중복확인을 하세요.');
+    else if(!myName) alert("성함을 입력하세요.");
+    else if(!email) alert('이메일을 입력하세요.');
+    else if(!password) alert('비밀번호를 입력하세요.');
+    else if(isCorrectPassword !== 1) alert('비밀번호가 일치하는지 확인하세요.');
+    else if(!isAddress) alert('도로명 주소를 입력하세요.');
+    else if(!detailAddr) alert('상세주소를 입력하세요.');
+    else{
+      axios.post(
+        'http://localhost:8000/api/signup',
+        {
+          "userid": userid,
+          "name": myName,
+          "email": email,
+          "password": password,
+          "road_addr": isAddress,
+          "detail_addr": detailAddr,
+        }
+      ).then(res =>{
+        props.setOnSignupSuccess(1);                
+      }).catch(error =>{
+        console.log(error.response.data);
+      });
+    }
+  }
+
+  useEffect(() => {
+    if(password !== '' && password === passwordAgain) setIsCorrectPassword(1);
+    else if(password === '') setIsCorrectPassword(-1);
+    else setIsCorrectPassword(0);
+  }, [password, passwordAgain, isCorrectPassword])
+
   return (
     <Container component="main" maxWidth="sm">
       <CssBaseline />
       {searchButtonClicked && <FindAddr />}
+      {props.onSignupSuccess === 1 && <Redirect to='/' />}
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -191,6 +230,7 @@ export default function SignUp() {
                 id="name"
                 label="성함"
                 autoFocus
+                onChange={e => setMyName(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -202,6 +242,7 @@ export default function SignUp() {
                 label="이메일 주소"
                 name="email"
                 autoComplete="email"
+                onChange={e => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -270,6 +311,7 @@ export default function SignUp() {
                 id="detailAddr"
                 label="상세주소"
                 autoFocus
+                onChange={e => setDetailAddr(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -279,6 +321,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={(e)=>onSignupButtonClick(e)}
           >
             회원가입
           </Button>
