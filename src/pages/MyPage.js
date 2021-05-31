@@ -12,7 +12,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MyPageUserUpdate from "./MyPageUserUpdate";
 import MyPageUserUnregister from "./MyPageUserUnregister";
 import MyPageUserCameraSetting from "./MyPageUserCameraSetting";
@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
 function MyPage(props) {
   const classes = useStyles();
   const [menu, setMenu] = useState(0);
+  const onLogoutClick = () => {
+    localStorage.removeItem("token");
+  };
   const onListItemClick = (index) => {
     if (index === 4) {
       alert("화재신고가 완료됐습니다");
@@ -66,6 +69,12 @@ function MyPage(props) {
               Last7
             </Typography>
           </Link>
+          <div style={{ width: "90%" }} />
+          <Link to="/" style={{ color: "white" }}>
+            <Typography variant="h6" onClick={onLogoutClick}>
+              로그아웃
+            </Typography>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -78,24 +87,20 @@ function MyPage(props) {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {[
-              "회원정보 수정",
-              "카메라 설정",
-              "로그아웃",
-              "회원탈퇴",
-              "화재신고",
-            ].map((text, index) => (
-              <ListItem
-                button
-                key={text}
-                onClick={() => onListItemClick(index)}
-              >
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
+            {["회원정보 수정", "카메라 설정", "회원탈퇴", "화재신고"].map(
+              (text, index) => (
+                <ListItem
+                  button
+                  key={text}
+                  onClick={() => onListItemClick(index)}
+                >
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              )
+            )}
           </List>
           <Divider />
         </div>
@@ -110,7 +115,6 @@ function MyPage(props) {
             userId={props.userId}
           />
         )}
-        {menu === 2 && <Redirect to="/" />}
         {menu === 3 && <MyPageUserUnregister />}
       </main>
     </div>

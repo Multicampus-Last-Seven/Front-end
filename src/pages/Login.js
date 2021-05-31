@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
+import toAddr from "./Info";
 
 function Copyright() {
   return (
@@ -47,11 +48,10 @@ export default function SignIn(props) {
   const [uid, setUid] = useState("");
   const [password, setPassword] = useState("");
   const [loginSuccess, setLoginSuccess] = useState(-1);
-  let resIots = null;
 
   const onLogin = (userid, password) => {
     axios
-      .post("http://localhost:8000/api/login", {
+      .post(`http://${toAddr}/api/login`, {
         userid: userid,
         password: password,
       })
@@ -66,7 +66,6 @@ export default function SignIn(props) {
       })
       .catch((error) => {
         setLoginSuccess(0);
-        console.log(error);
       });
   };
 

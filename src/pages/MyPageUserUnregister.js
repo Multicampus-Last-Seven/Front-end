@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';
+import toAddr from "./Info";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const onLogin = async (userid, password, setLogged, setLoginSuccess) => {
   await axios.post(
-    "http://localhost:8000/api/login",
+    `http://${toAddr}/api/login`,
     {
       "userid": userid,
       "password": password

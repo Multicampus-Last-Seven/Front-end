@@ -13,6 +13,7 @@ import DaumPostcode from "react-daum-postcode";
 import { Modal, RootRef } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import toAddr from "./Info";
 
 function Copyright() {
   return (
@@ -128,7 +129,7 @@ export default function SignUp(props) {
 
   const onIdCheckButtonClick = () => {
       axios.post(
-          'http://localhost:8000/api/userid-check',
+          `http://${toAddr}/api/userid-check`,
           {"userid": userid}
       ).then(res => {
           setIsIdUnique(1);
@@ -151,7 +152,7 @@ export default function SignUp(props) {
     else if(!detailAddr) alert('상세주소를 입력하세요.');
     else{
       axios.post(
-        'http://localhost:8000/api/signup',
+        `http://${toAddr}/api/signup`,
         {
           "userid": userid,
           "name": myName,

@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import toAddr from "./Info";
 
 function MyPageUserCameraSetting(props) {
   const [inputList, setInputList] = useState([
@@ -38,7 +39,7 @@ function MyPageUserCameraSetting(props) {
     console.log(inputList);
     axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
     axios
-      .post(`http://localhost:8000/api/${props.userId}/iots`, {
+      .post(`http://${toAddr}/api/${props.userId}/iots`, {
         "userid": props.userId,
         "iots": [...inputList],
       })
@@ -53,7 +54,7 @@ function MyPageUserCameraSetting(props) {
   };
 
   useEffect(()=>{
-    setInputList(props.iots)
+    if(props.iots.length > 0) setInputList(props.iots)
   },[])
 
   return (
