@@ -74,7 +74,7 @@ function Monitor(props) {
 
   const _init = () => {
     const c = mqtt.connect(
-      "15.165.185.201",
+      "yourIP",
       Number(9001),
       "mqtt",
       _onConnectionLost,
