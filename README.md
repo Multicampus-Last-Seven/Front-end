@@ -19,10 +19,10 @@
 
 ## 1. 구현한 핵심 기능
 
-- 회원가입
-- 로그인
-- CCTV 등록/삭제
-- MQTT를 통한 CCTV 영상 스트리밍
+- 회원가입 (by Giyoon Park)
+- 로그인 (by Giyoon Park)
+- CCTV 등록/삭제 (by Giyoon Park)
+- MQTT를 통한 CCTV 영상 스트리밍 (by Giyoon Park, Gioan Park)
 
 <br/>
 
